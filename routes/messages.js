@@ -1,17 +1,6 @@
 import express from 'express';
 import { Messages } from '../models/message';
 
-let messages = [
-  {
-    text: 'Some messages',
-    owner: 'David'
-  },
-  {
-    text: 'the seconde messages',
-    owner: 'Jim'
-  }
-];
-
 const router = express.Router();
 
 router.get('/messages', (_req, res) => {
