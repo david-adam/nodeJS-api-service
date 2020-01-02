@@ -1,5 +1,9 @@
 import express from 'express';
 import cors from 'cors';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
+import { mongoURI } from './config/database';
+import message from './routes/messages';
 
 const whitelist = [
   'http://example1.com',
@@ -23,24 +27,26 @@ const app = express();
 app.use(corsHandler);
 app.options('*', corsHandler);
 
-const messages = [
-  {
-    text: 'Some messages',
-    owner: 'David'
-  },
-  {
-    text: 'the seconde messages',
-    owner: 'Jim'
-  }
-];
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
+mongoose.Promise = global.Promise;
+mongoose
+  .connect(mongoURI, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log('MongoDB connected');
+  })
+  .catch(err => console.log(err));
 
 app.get('/', (_req, res) => {
   res.json('Hello');
 });
 
-app.get('/messages', (req, res) => {
-  res.json(messages);
-});
+app.use('/api', message);
 
 const port = process.env.port || 8000;
 
