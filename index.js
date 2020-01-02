@@ -1,6 +1,27 @@
 import express from 'express';
+import cors from 'cors';
+
+const whitelist = [
+  'http://example1.com',
+  'http://example2.com',
+  'http://localhost:4200'
+];
+const corsOptions = {
+  origin: function(origin, callback) {
+    if (whitelist.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  }
+};
+
+const corsHandler = cors(corsOptions);
 
 const app = express();
+
+app.use(corsHandler);
+app.options('*', corsHandler);
 
 const messages = [
   {
