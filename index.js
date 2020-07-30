@@ -4,6 +4,7 @@ import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import { mongoURI } from './config/database';
 import message from './routes/messages';
+import enrollment from './routes/enrollment';
 
 const whitelist = [
   'http://example1.com',
@@ -47,6 +48,7 @@ app.get('/', (_req, res) => {
 });
 
 app.use('/api', message);
+app.use('/enrollment', enrollment);
 
 const port = process.env.port || 8000;
 
